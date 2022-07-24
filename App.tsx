@@ -40,8 +40,7 @@ export default function App() {
         <Button 
           title="Go"
           onPress={() => getResults()}
-          color="green"
-          style={styles.goButton}/>
+          color="green"/>
       <ScrollView style={styles.scrollView}>
         <Text>{searchTerm}</Text>
         <>{isLoading === false && data !== null ? 
