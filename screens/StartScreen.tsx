@@ -2,11 +2,11 @@ import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useFonts } from '@expo-google-fonts/inter';
 
-const TestButtons = () => {
+const StartScreen = ( {navigation}:{navigation: any} ) => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View>
+        <View style={styles.headerText}>
         <Text style={styles.blackText}>
             Where
             <Text style={styles.redText}>
@@ -15,7 +15,7 @@ const TestButtons = () => {
             Eat
         </Text>
         </View>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={() => navigation.navigate("create room screen")}>
         <Text style={styles.buttonTxt}>create a room</Text>
       </Pressable>
       <Pressable style={styles.button}>
@@ -50,17 +50,20 @@ const styles = StyleSheet.create({
       fontWeight: "400",
       color: "rgba(255, 255, 255, 1)",
     },
+    headerText: {
+      marginBottom: 56
+    },
     blackText: {
         fontSize: 32,
         fontFamily: "Inter",
         fontWeight: "400",
     },
     redText: {
-        fontSize: 32,
+        fontSize: 35,
         fontFamily: "Inter",
         fontWeight: "500",
         color: "#FF0000"
-    }
+    },
   })
 
-export default TestButtons
+export default StartScreen

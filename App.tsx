@@ -3,8 +3,9 @@ import HomeScreen from './screens/HomeScreen';
 import YelpResults from './screens/YelpResults';
 import { NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TestButtons from './screens/TestButtons';
+import StartScreen from './screens/StartScreen';
 import { useFonts } from '@expo-google-fonts/inter';
+import CreateRoomPg from './screens/CreateRoomPg';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,18 +20,23 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{
+        headerShown: false }} >
+        <Stack.Screen 
+          name="start"
+          component = {StartScreen}
+        />
+        <Stack.Screen
+          name="create room screen"
+          component={CreateRoomPg}
+          options={{headerShown: true,
+          headerTitleStyle: {
+            color: 'white'
+          }}}
+        />
         <Stack.Screen 
           name="Home" 
           component={HomeScreen} />
-        <Stack.Screen 
-          name="test"
-          component = {TestButtons}
-        />
-        <Stack.Screen
-          name="yelp results"
-          component={YelpResults}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );

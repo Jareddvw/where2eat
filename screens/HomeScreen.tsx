@@ -9,7 +9,7 @@ const HomeScreen = ({ navigation }: {navigation: any}) => {
 
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate('test')}
+          onPress={() => navigation.navigate('start')}
         >
           <Text style={styles.buttonText}>
             Create a group
