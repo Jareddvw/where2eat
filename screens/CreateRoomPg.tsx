@@ -1,19 +1,21 @@
 import { SafeAreaView } from "react-native-safe-area-context"
-import React, {useState} from "react"
-import { StyleSheet, View, Text, TextInput, Pressable } from "react-native"
+import React, {useRef, useState} from "react"
+import { StyleSheet, View, Text, TextInput, Pressable, findNodeHandle, } from "react-native"
 import EvilIcons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
-const CreateRoomPg = () => {
+const CreateRoomPg = ({ navigation }: {navigation: any}) => {
 
     let [location, setLocation] = useState("")
     let [food, setFood] = useState("")
     let [roomName, setRoomName] = useState("")
 
+
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <Text style={styles.headerTxt}>Create a room</Text>
         <View style={styles.inputArea}>
             <Text style={styles.captionText}>Where will you be eating?</Text>
@@ -51,10 +53,12 @@ const CreateRoomPg = () => {
                 />
             </View>
         </View>
-        <Pressable style={styles.button}>
-            <Text style={styles.buttonTxt}>create new room</Text>
+        <Pressable 
+            style={styles.button}
+            onPress={() => navigation.navigate("create part 2")}>
+            <Text style={styles.buttonTxt}>next step</Text>
         </Pressable>
-    </SafeAreaView>
+    </KeyboardAwareScrollView>
   )
 }
 
@@ -92,7 +96,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F4F4F4',
         width: 287,
-        borderRadius: 30
+        borderRadius: 30,
+        height: 46,
     },
     searchIcon: {
         padding: 10,

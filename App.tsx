@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import StartScreen from './screens/StartScreen';
 import { useFonts } from '@expo-google-fonts/inter';
 import CreateRoomPg from './screens/CreateRoomPg';
+import CreatePart2 from './screens/CreatePart2';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,14 @@ export default function App() {
         <Stack.Screen
           name="create room screen"
           component={CreateRoomPg}
+          options={{headerShown: true,
+          headerTitleStyle: {
+            color: 'white'
+          }}}
+        />
+        <Stack.Screen
+          name="create part 2"
+          component={CreatePart2}
           options={{headerShown: true,
           headerTitleStyle: {
             color: 'white'
