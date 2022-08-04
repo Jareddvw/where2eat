@@ -7,6 +7,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Ionicons } from '@expo/vector-icons'; 
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Slider from '@react-native-community/slider';
+import { Animated } from "react-native";
+import { useRef } from "react";
 
 const CreatePart2 = ({ navigation }: {navigation: any}) => {
 
@@ -38,7 +40,6 @@ const CreatePart2 = ({ navigation }: {navigation: any}) => {
         }
         if (Platform.OS === 'android') {
             setShow(false);
-            // for iOS, add a button that closes the picker
         }
     };
 
