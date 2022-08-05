@@ -9,6 +9,7 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Slider from '@react-native-community/slider';
 import { Animated } from "react-native";
 import { useRef } from "react";
+import { useCallback } from "react";
 
 const CreatePart2 = ({ navigation }: {navigation: any}) => {
 
@@ -18,28 +19,25 @@ const CreatePart2 = ({ navigation }: {navigation: any}) => {
     }
 
     let [distance, setDistance] = useState(2)
-    let [food, setFood] = useState("")
-    let [roomName, setRoomName] = useState("")
     let [time, setTime] = useState(addHours(0.5, new Date()))
     let [show, setShow] = useState(false)
     let [prices, setPrices] = useState([true, false, false, false])
-    let mode = "time"
 
-    let timeToString = (time:Date): string => {
-        let hours = time.getHours() 
+    let timeToString = (newTime:Date): string => {
+        let hours = newTime.getHours() 
         let end = (hours >= 12 ? " pm" : " am")
         hours = ((hours + 11) % 12 + 1)
-        let minutes: number | string = time.getMinutes()
+        let minutes: number | string = newTime.getMinutes()
         minutes = (minutes < 10 ? "0" + minutes : "" + minutes)
         return hours + ":" + minutes + end
     }
 
     const onChange = (event: any, selectedDate: Date | undefined)=> {
+        if (Platform.OS !== 'ios') {
+            setShow(false)
+        }
         if (selectedDate !== undefined) {
             setTime(selectedDate);
-        }
-        if (Platform.OS === 'android') {
-            setShow(false);
         }
     };
 
@@ -141,7 +139,7 @@ const CreatePart2 = ({ navigation }: {navigation: any}) => {
                 </Pressable>
             </View>
         </View>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate("choices")}>
             <Text style={styles.buttonTxt}>create new room</Text>
         </Pressable>
         {show === true && Platform.OS !== 'ios' ? (
@@ -152,7 +150,6 @@ const CreatePart2 = ({ navigation }: {navigation: any}) => {
             is24Hour={false}
             onChange={onChange}
             style={{width: 320, backgroundColor: "white"}}
-            display="clock"
             />
         ) : <></>}
     </KeyboardAwareScrollView>
@@ -291,7 +288,7 @@ const styles = StyleSheet.create({
         fontSize:13,
     },
     priceTextNotSelected: {
-        color: 'black',
+        color: '#A3A3A3',
         alignSelf:'center',
         fontFamily:'Inter',
         fontSize:13,
