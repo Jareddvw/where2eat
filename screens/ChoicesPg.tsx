@@ -9,9 +9,12 @@ import { Feather } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 import sampleData from '../components/sampleData';
 
-const ChoicesPg = ({ navigation }: {navigation: any}) => {
+const windowWidth = (Dimensions.get('window').width)
+const windowHeight = (Dimensions.get('window').height)
 
-    const thirdWindowWidth = (Dimensions.get('window').width) / 3;
+const ChoicesPg = ({ navigation }: {navigation: any}) => {
+    
+    const fourthWindowWidth = windowWidth / 4;
 
     const restaurantList = sampleData
 
@@ -39,12 +42,12 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
           null,
           { dx: pan.x, dy: pan.y }
         ],
-        {useNativeDriver: false}
+        {useNativeDriver: true}
         ),
         onPanResponderRelease: () => {
           Animated.spring(pan, {
             toValue: { x: 0, y: 0 },
-            useNativeDriver: false
+            useNativeDriver: true
         }).start();
         }
       })
@@ -76,11 +79,11 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                     <TinderCard 
                         preventSwipe={['up', 'down']}
                         swipeRequirementType={"position"}
-                        swipeThreshold={thirdWindowWidth}
+                        swipeThreshold={windowWidth / 2}
                         onSwipeRequirementFulfilled = {(dir) => {
                             if (dir === 'left') {
                                 setRightOrLeft(0)
-                            } else {
+                            } else if (dir === 'right') {
                                 setRightOrLeft(1)
                             }
                         }}
@@ -94,7 +97,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                         ref={childRefs[currentIndex]}
                         >
                         <View style={styles.cards}>
-                            <Card />
+                            <Card restaurant={restaurantList[2]} />
                         </View>
                     </TinderCard>
             </View>
@@ -110,7 +113,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                         <MaterialCommunityIcons name="window-close" size={32} color="white" />
                 </Pressable>
                 <Pressable style={[
-                        styles.button, 
+                        styles.button,
                         styles.greenButton,
                         {opacity: (rightOrLeft > 0.5 ? 1 : 0.33)}
                     ]}
@@ -180,18 +183,23 @@ const styles = StyleSheet.create({
     cardSection: {
         marginTop: 19,
         flex:10,
+        height: (10 * windowHeight / 13),
+        width: windowWidth - 32,
+        position: 'relative',
     },
     cards: {
+        flex: 1,
         backgroundColor: "white",
         shadowColor: "rgba(0,0,0,0.25)",
         shadowOpacity: 100,
         shadowRadius: 4,
         elevation: 3,
         shadowOffset: { width: 0, height: 0 },
-        width: '100%',
-        height: '100%',
+        height: (10 * windowHeight / 15),
+        width: windowWidth - 32,
         borderRadius: 15,
         zIndex: 1,
+        position: 'absolute'
     },
     buttonSection: {
         flex:1,
