@@ -31,6 +31,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
         if (currentIndex >= restaurantList.length) return;
         if (childRefs[index] !== null) {
             await childRefs[index].current.swipe(dir) // Swipe the card!
+            setCurrentIndex(currentIndex + 1)
         }
     }
 
@@ -76,7 +77,9 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                 <Text style={styles.userName}>tacolover99</Text>
             </View>
             <View style={styles.cardSection}>
+                {restaurantList.map((restaurant, index) => { return (
                     <TinderCard 
+                        key={index}
                         preventSwipe={['up', 'down']}
                         swipeRequirementType={"position"}
                         swipeThreshold={windowWidth / 2}
@@ -96,10 +99,12 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                         }}
                         ref={childRefs[currentIndex]}
                         >
-                        <View style={styles.cards}>
-                            <Card restaurant={restaurantList[2]} />
+                        <View key={index} style={styles.cards}>
+                            <Card key={index} restaurant={restaurant} />
                         </View>
                     </TinderCard>
+                )
+                })}
             </View>
             <View style={styles.buttonSection}>
                 <Pressable 
@@ -108,7 +113,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                         styles.redButton,
                         {opacity: (rightOrLeft < 0.5 ? 1 : 0.33)}
                         ]}
-                    onPress={()=>swipe('left', 0)}
+                    onPress={()=>swipe('left', currentIndex)}
                     >
                         <MaterialCommunityIcons name="window-close" size={32} color="white" />
                 </Pressable>
@@ -117,7 +122,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                         styles.greenButton,
                         {opacity: (rightOrLeft > 0.5 ? 1 : 0.33)}
                     ]}
-                    onPress={()=>swipe('right', 0)}
+                    onPress={()=>swipe('right', currentIndex)}
                     >
                         <Feather name="check" size={32} color="white" />
                 </Pressable>

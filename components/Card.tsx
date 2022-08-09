@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'; 
 import { Ionicons } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
 type location = {
   "address1": string,
@@ -41,6 +42,8 @@ const Card = ( { restaurant }: {restaurant: {
           {([...Array(5)]).map((e, i) => {
             if (i > Math.round(restaurant.rating) - 1) {
               return <AntDesign name="star" size={20} color="#C5C2C2" />
+            } else if (i + 0.5 >= restaurant.rating) {
+              return <FontAwesome5 name="star-half-alt" size={18} color="#FF0000" />
             } else {
               return <AntDesign name="star" size={20} color="#FF0000" />
             }
@@ -108,6 +111,7 @@ const styles = StyleSheet.create({
       justifyContent:"flex-start",
       fontFamily: 'Inter',
       fontSize: 14,
+      flexWrap: 'wrap',
     },
     price: {
       fontFamily: 'Inter',
