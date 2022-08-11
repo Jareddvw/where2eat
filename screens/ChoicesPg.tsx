@@ -1,5 +1,5 @@
-import React, {useState, useMemo, Ref} from 'react'
-import {StyleSheet, View, SafeAreaView, Text, Pressable, Platform } from 'react-native'
+import React, {useState, useMemo, Ref, useEffect} from 'react'
+import {StyleSheet, View, SafeAreaView, Text, Pressable, Platform, ListViewBase } from 'react-native'
 import { Animated, PanResponder } from 'react-native';
 import { useRef } from 'react';
 import TinderCard from 'react-tinder-card';
@@ -16,8 +16,28 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
     
     const fourthWindowWidth = windowWidth / 4;
 
-    const restaurantList = sampleData
 
+    const [restaurantList, setRestaurantList] = useState(sampleData)
+    const [rightOrLeft, setRightOrLeft] = useState(0.5)
+    const [currentIndex, setCurrentIndex] = useState(restaurantList.length - 1)
+    let [animList, setAnimList] = useState(restaurantList.map((index) => {
+        let mainValue = new Animated.ValueXY()
+        let animatedScale = mainValue.x.interpolate({
+            inputRange: [-windowWidth / 2, 0, windowWidth / 2],
+            outputRange: [1, 0.8, 1],
+            extrapolate: 'clamp'
+        })
+        let animatedOpacity = mainValue.x.interpolate({
+            inputRange: [-windowWidth / 2, 0, windowWidth / 2],
+            outputRange: [1, 0, 1],
+            extrapolate: 'clamp'
+        })
+        return {
+            main:mainValue,
+            scale:animatedScale,
+            opacity:animatedOpacity
+        }
+    }))
 
     const childRefs: any = useMemo(
         () =>
@@ -27,35 +47,28 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
         []
     )
 
+    useEffect(() => {
+        animateStuff(restaurantList.length)
+    }, [])
+
     const swipe = async (dir:string, index:number) => {
-        if (currentIndex >= restaurantList.length) return;
+        if (currentIndex < 0) return;
         if (childRefs[index] !== null) {
+            setCurrentIndex(index - 1)
+            animateStuff(index)
             await childRefs[index].current.swipe(dir) // Swipe the card!
-            setCurrentIndex(currentIndex + 1)
         }
     }
 
-    const pan = useRef(new Animated.ValueXY()).current;
-    const panResponder = useRef(
-      PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: Animated.event([
-          null,
-          { dx: pan.x, dy: pan.y }
-        ],
-        {useNativeDriver: true}
-        ),
-        onPanResponderRelease: () => {
-          Animated.spring(pan, {
-            toValue: { x: 0, y: 0 },
-            useNativeDriver: true
-        }).start();
+    const animateStuff = (index:number) => {
+        if (index - 1 >=0) {
+            Animated.timing(animList[index - 1].main, {
+                toValue: {x: windowWidth/2, y:0},
+                duration:100,
+                useNativeDriver: true
+            }).start()
         }
-      })
-    ).current;
-
-    const [rightOrLeft, setRightOrLeft] = useState(0.5)
-    const [currentIndex, setCurrentIndex] = useState(0)
+    }
 
   return (
     <SafeAreaView style={styles.outermost}>
@@ -77,33 +90,54 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                 <Text style={styles.userName}>tacolover99</Text>
             </View>
             <View style={styles.cardSection}>
-                {restaurantList.map((restaurant, index) => { return (
-                    <TinderCard 
-                        key={index}
-                        preventSwipe={['up', 'down']}
-                        swipeRequirementType={"position"}
-                        swipeThreshold={windowWidth / 2}
-                        onSwipeRequirementFulfilled = {(dir) => {
-                            if (dir === 'left') {
-                                setRightOrLeft(0)
-                            } else if (dir === 'right') {
-                                setRightOrLeft(1)
-                            }
-                        }}
-                        onSwipeRequirementUnfulfilled = {() => {
-                            setRightOrLeft(0.5)
-                        }}
-                        onSwipe={(dir) => {
-                            setRightOrLeft(0.5)
-                            // need to add stuff to remove the old cards
-                        }}
-                        ref={childRefs[currentIndex]}
-                        >
-                        <View key={index} style={styles.cards}>
-                            <Card key={index} restaurant={restaurant} />
-                        </View>
-                    </TinderCard>
-                )
+                {animList.length === 0 ? <></> :   
+                restaurantList.map((restaurant:any, index) => {
+                        return (
+                            <TinderCard 
+                                key={index}
+                                preventSwipe={['up', 'down']}
+                                swipeRequirementType={"velocity"}
+                                swipeThreshold={1}
+                                // onSwipeRequirementFulfilled = {(dir) => {
+                                //     if (dir === 'left') {
+                                //         setRightOrLeft(0)
+                                //     } else if (dir === 'right') {
+                                //         setRightOrLeft(1)
+                                //     }
+                                // }}
+                                // onSwipeRequirementUnfulfilled = {() => {
+                                //     setRightOrLeft(0.5)
+                                // }}
+                                onSwipe={(dir) => {
+                                    animateStuff(index)
+                                    setCurrentIndex(index - 1)
+                                    // setRightOrLeft(0.5)
+                                    // need to add stuff to remove the old cards
+                                }}
+                                ref={childRefs[index]}
+                                >
+                                <Animated.View key={index} style={
+                                    // currentIndex === index ?
+                                    [styles.cards,
+                                        {
+                                            shadowColor: "rgba(0,0,0,0.25)",
+                                            shadowOpacity: 100,
+                                            shadowRadius: 4,
+                                            elevation: 3,
+                                            shadowOffset: { width: 0, height: 0 }
+                                        },
+                                        {transform: [{
+                                            scale: animList[index].scale}]},
+                                        {opacity: 
+                                            animList[index].opacity
+                                        }
+                                    ]
+                                    // : styles.cards
+                                }>
+                                    <Card key={index} restaurant={restaurant} />
+                                </Animated.View>
+                            </TinderCard>
+                        )
                 })}
             </View>
             <View style={styles.buttonSection}>
@@ -111,7 +145,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                     style={[
                         styles.button, 
                         styles.redButton,
-                        {opacity: (rightOrLeft < 0.5 ? 1 : 0.33)}
+                        // {opacity: (rightOrLeft < 0.5 ? 1 : 0.33)}
                         ]}
                     onPress={()=>swipe('left', currentIndex)}
                     >
@@ -120,7 +154,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                 <Pressable style={[
                         styles.button,
                         styles.greenButton,
-                        {opacity: (rightOrLeft > 0.5 ? 1 : 0.33)}
+                        // {opacity: (rightOrLeft > 0.5 ? 1 : 0.33)}
                     ]}
                     onPress={()=>swipe('right', currentIndex)}
                     >
@@ -131,7 +165,18 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
     </SafeAreaView>
       )
     }
-    
+
+const sizes = {
+    headerView: 2,
+    cardSection: 10,
+    buttonSection: 1
+}
+
+const totalSize = Object.values(sizes).reduce((a, b) => a + b);
+
+const cardSectionHeight = (sizes.cardSection * windowHeight / totalSize)
+const cardHeight = (sizes.cardSection * windowHeight / (totalSize + 2))
+
 const styles = StyleSheet.create({
     outermost: {
         flex: 1,
@@ -148,7 +193,7 @@ const styles = StyleSheet.create({
         marginRight: 16
     },
     headerView: {
-        flex:2,
+        flex:sizes.headerView,
         alignItems:'flex-start',
         marginTop: Platform.OS === "ios" ? 10 : 30,
         justifyContent: 'space-between',
@@ -187,31 +232,31 @@ const styles = StyleSheet.create({
     },
     cardSection: {
         marginTop: 19,
-        flex:10,
-        height: (10 * windowHeight / 13),
+        flex:sizes.cardSection,
+        height: cardSectionHeight,
         width: windowWidth - 32,
         position: 'relative',
     },
     cards: {
         flex: 1,
         backgroundColor: "white",
-        shadowColor: "rgba(0,0,0,0.25)",
-        shadowOpacity: 100,
-        shadowRadius: 4,
-        elevation: 3,
-        shadowOffset: { width: 0, height: 0 },
-        height: (10 * windowHeight / 15),
+        // shadowColor: "rgba(0,0,0,0.25)",
+        // shadowOpacity: 100,
+        // shadowRadius: 4,
+        // elevation: 3,
+        // shadowOffset: { width: 0, height: 0 },
+        height: cardHeight,
         width: windowWidth - 32,
         borderRadius: 15,
         zIndex: 1,
         position: 'absolute'
     },
     buttonSection: {
-        flex:1,
+        flex:sizes.buttonSection,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-        marginTop: 10,
+        marginTop: Platform.OS === 'ios' ? 10 : 0,
         zIndex: -100,
     },
     button: {

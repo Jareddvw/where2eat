@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
+import React, { useCallback } from 'react'
+import { StyleSheet, View, Text, Image, Linking, Alert, Pressable, Button } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'; 
 import { Ionicons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
@@ -18,6 +18,22 @@ type category = {
   "alias": string,
   "title": string
 }
+const OpenURLButton = ({ url, children }: {url: string, children: any}) => {
+  const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, [url]);
+
+  return <Button title={children} onPress={handlePress} />;
+};
 
 const Card = ( { restaurant }: {restaurant: {
   "name":string,
@@ -34,6 +50,18 @@ const Card = ( { restaurant }: {restaurant: {
   "distance":number
 }} ) => {
 
+  const handleClick = () => {
+    Linking.canOpenURL(restaurant.url).then(supported => {
+      if (supported) {
+        Linking.openURL(restaurant.url);
+      } else {
+        console.log("Don't know how to open URI: " + restaurant.url);
+      }
+    });
+  };
+
+  const supportedURL = "https://google.com";
+
   return (
     <View style={styles.main}>
       <View style={styles.header}>
@@ -41,11 +69,11 @@ const Card = ( { restaurant }: {restaurant: {
         <View style={styles.stars}>
           {([...Array(5)]).map((e, i) => {
             if (i > Math.round(restaurant.rating) - 1) {
-              return <AntDesign name="star" size={20} color="#C5C2C2" />
+              return <AntDesign key={i} name="star" size={20} color="#C5C2C2" />
             } else if (i + 0.5 >= restaurant.rating) {
-              return <FontAwesome5 name="star-half-alt" size={18} color="#FF0000" />
+              return <FontAwesome5 key={i} name="star-half-alt" size={18} color="#FF0000" />
             } else {
-              return <AntDesign name="star" size={20} color="#FF0000" />
+              return <AntDesign key={i} name="star" size={20} color="#FF0000" />
             }
           })}
           <Text style={{color: '#C5C2C2', fontSize:12}}>{"   (" + restaurant.review_count})</Text>
@@ -53,8 +81,8 @@ const Card = ( { restaurant }: {restaurant: {
       </View>
       <View style={styles.subHeader}>
         <View style={styles.categories}>
-          {restaurant.categories.map(cat => {
-              return (<Text style={{marginRight: 20}}>{cat.title}</Text>)
+          {restaurant.categories.map((cat, index) => {
+              return (<Text key={index} style={{marginRight: 20}}>{cat.title}</Text>)
             })}
         </View>
         <Text style={styles.price}>{restaurant.price}</Text>
@@ -66,9 +94,12 @@ const Card = ( { restaurant }: {restaurant: {
         <Text style={{color:restaurant.is_closed ? "#DD0000" : "#039A00"}}>{restaurant.is_closed === true ? "Closed" : "Open now"}</Text>
         <Text>{restaurant.display_phone}</Text>
       </View>
-      <View style={styles.distance}>
-        <Ionicons name="location-sharp" size={20} color="#FF4040" />
-        <Text> {Math.round(restaurant.distance * 0.000621371 * 100) / 100} miles</Text>
+      <View style={styles.distAndYelp}>
+        <View style={styles.distance}>
+          <Ionicons name="location-sharp" size={15} color="#FF4040" />
+          <Text> {Math.round(restaurant.distance * 0.000621371 * 100) / 100} miles</Text>
+        </View>
+        <FontAwesome5 name="yelp" size={15} color="#FF4040"/>
       </View>
       <View style={styles.location}>
         <Text>{restaurant.location?.display_address.join(", ")}</Text>
@@ -127,6 +158,12 @@ const styles = StyleSheet.create({
     },
     openAndNumber: {
       marginTop: 5,
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    distAndYelp: {
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
