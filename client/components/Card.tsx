@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
+
 type location = {
   "address1": string,
   "address2": string,
@@ -68,7 +69,9 @@ const Card = ( { restaurant }: {restaurant: rest} ) => {
   return (
     <View style={styles.main}>
       <View style={styles.header}>
-        <Text style={styles.restaurantName}>{restaurant.name}</Text>
+        <View style={styles.nameView}>
+          <Text style={styles.restaurantName}>{restaurant.name}</Text>
+        </View>
         <View style={styles.stars}>
           {([...Array(5)]).map((e, i) => {
             if (i > Math.round(restaurant.rating) - 1) {
@@ -121,15 +124,26 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       flex: 1,
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: 'center',
+    },
+    nameView: {
+      flex:1,
+      flexWrap:'wrap',
+      alignItems:'center',
+      justifyContent:'flex-start'
     },
     restaurantName: {
       fontSize: 24,
+      color:'black',
       fontFamily: "Inter",
+      flex:1,
+      flexWrap:'wrap',
     },
     stars: {
+      flex:1,
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'flex-end'
     },
     subHeader: {
       flex: 1,

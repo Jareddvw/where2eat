@@ -57,7 +57,7 @@ const CreateRoomPg = ({ navigation }: {navigation: any}) => {
             style={styles.button}
             onPress={() => navigation.navigate("create part 2", {
                 roomName:roomName,
-                food:food,
+                food:[food],
                 location:location
             })}>
             <Text style={styles.buttonTxt}>next step</Text>
