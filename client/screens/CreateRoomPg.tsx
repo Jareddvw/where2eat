@@ -9,9 +9,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 const CreateRoomPg = ({ navigation }: {navigation: any}) => {
 
-    let [location, setLocation] = useState("")
-    let [food, setFood] = useState("")
-    let [roomName, setRoomName] = useState("")
+    let [location, setLocation] = useState<string>("")
+    let [food, setFood] = useState<string>("")
+    let [roomName, setRoomName] = useState<string>("")
 
 
   return (
@@ -30,7 +30,7 @@ const CreateRoomPg = ({ navigation }: {navigation: any}) => {
             </View>
         </View>
         <View style={styles.inputArea}>
-            <Text style={styles.captionText}>Any food preferences?</Text>
+            <Text style={styles.captionText}>Any food categories?</Text>
             <View style={styles.searchSection}>
                 <MaterialCommunityIcons style={styles.searchIcon} name="silverware-fork-knife" size={20} color="black"/>
                 <TextInput
@@ -55,7 +55,11 @@ const CreateRoomPg = ({ navigation }: {navigation: any}) => {
         </View>
         <Pressable 
             style={styles.button}
-            onPress={() => navigation.navigate("create part 2")}>
+            onPress={() => navigation.navigate("create part 2", {
+                roomName:roomName,
+                food:food,
+                location:location
+            })}>
             <Text style={styles.buttonTxt}>next step</Text>
         </Pressable>
     </KeyboardAwareScrollView>

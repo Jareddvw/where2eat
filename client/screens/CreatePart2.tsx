@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useCallback, useContext, useEffect, useState} from "react"
 import { StyleSheet, View, Text, TextInput, Pressable, Platform, } from "react-native"
 import EvilIcons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
@@ -7,21 +7,56 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Ionicons } from '@expo/vector-icons'; 
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Slider from '@react-native-community/slider';
-import { Animated } from "react-native";
-import { useRef } from "react";
-import { useCallback } from "react";
+import { SocketContext } from "../context/socket";
 
-const CreatePart2 = ({ navigation }: {navigation: any}) => {
+const CreatePart2 = ( { navigation, route }: {navigation:any, route:any}) => {
 
-    let addHours = function(h: any, date:Date) {
+    let addHours = function(h: number, date:Date) {
         date.setTime(date.getTime() + (h*60*60*1000));
         return date;
     }
 
-    let [distance, setDistance] = useState(2)
-    let [time, setTime] = useState(addHours(0.5, new Date()))
-    let [show, setShow] = useState(false)
-    let [prices, setPrices] = useState([true, false, false, false])
+    let [distance, setDistance] = useState<number>(2)
+    let [time, setTime] = useState<Date>(addHours(0.5, new Date()))
+    let [show, setShow] = useState<boolean>(false)
+    let [prices, setPrices] = useState<Array<boolean>>([true, false, false, false])
+
+    const {socket, setRestaurants} = useContext(SocketContext)
+
+    useEffect(() => {
+        socket.on("successfully created room!", (rests) => handleSuccessfulCreate(rests))
+        socket.on("error", (message) => handleFailedCreate(message))
+    }, [])
+
+    const handleFailedCreate = useCallback((message) => {
+        console.log(message)
+    }, [])
+    const handleSuccessfulCreate = useCallback((restaurants) => {
+        console.log('successful create. Setting restaurants')
+        setRestaurants(restaurants)
+        navigation.navigate("choices", {roomName:route.params.roomName})
+    }, [])
+
+    const createRoom = () => {
+        console.log("create room called: " + route.params.roomName)
+        socket.emit("create-room", route.params.roomName, {
+            location: route.params.location,
+            radius: parseInt(distance * 1609.344 + ""),
+            categories: route.params.food,
+            open_at: Math.floor(time.getTime() / 1000),
+            price: getPricesArray()
+        })
+    }
+
+    const getPricesArray = () => {
+        let result = []
+        for (let i = 0; i < prices.length; i += 1) {
+            if (prices[i] === true) {
+                result.push(i + 1);
+            }
+        }
+        return result
+    }
 
     let timeToString = (newTime:Date): string => {
         let hours = newTime.getHours() 
@@ -139,7 +174,7 @@ const CreatePart2 = ({ navigation }: {navigation: any}) => {
                 </Pressable>
             </View>
         </View>
-        <Pressable style={styles.button} onPress={() => navigation.navigate("choices")}>
+        <Pressable style={styles.button} onPress={createRoom}>
             <Text style={styles.buttonTxt}>create new room</Text>
         </Pressable>
         {show === true && Platform.OS !== 'ios' ? (

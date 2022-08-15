@@ -7,10 +7,14 @@ import { useFonts } from '@expo-google-fonts/inter';
 import CreateRoomPg from './screens/CreateRoomPg';
 import CreatePart2 from './screens/CreatePart2';
 import ChoicesPg from './screens/ChoicesPg';
+import io from 'socket.io-client';
+import { useEffect } from 'react';
+import { SocketContext, socket, SocketProvider } from './context/socket';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
   const [loaded] = useFonts({
     'Inter': require('./assets/fonts/Inter-V.ttf'),
   });
@@ -20,42 +24,44 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{
-        headerShown: false }} >
-        <Stack.Screen 
-          name="start"
-          component = {StartScreen}
-        />
-        <Stack.Screen
-          name="create room screen"
-          component={CreateRoomPg}
-          options={{headerShown: true,
-          headerTitleStyle: {
-            color: 'white'
-          }}}
-        />
-        <Stack.Screen
-          name="create part 2"
-          component={CreatePart2}
-          options={{headerShown: true,
-          headerTitleStyle: {
-            color: 'white'
-          }}}
-        />
-        <Stack.Screen
-          name="choices"
-          component={ChoicesPg}
-          // options={{
-          //   headerShown: true,
-          //   headerTitleStyle: {
-          //     color: 'white'
-          //   },
-          //   headerBackTitle: 'Back'
-          // }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SocketProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{
+          headerShown: false }} >
+          <Stack.Screen 
+            name="start"
+            component = {StartScreen}
+          />
+          <Stack.Screen
+            name="create room screen"
+            component={CreateRoomPg}
+            options={{headerShown: true,
+            headerTitleStyle: {
+              color: 'white'
+            }}}
+          />
+          <Stack.Screen
+            name="create part 2"
+            component={CreatePart2}
+            options={{headerShown: true,
+            headerTitleStyle: {
+              color: 'white'
+            }}}
+          />
+          <Stack.Screen
+            name="choices"
+            component={ChoicesPg}
+            // options={{
+            //   headerShown: true,
+            //   headerTitleStyle: {
+            //     color: 'white'
+            //   },
+            //   headerBackTitle: 'Back'
+            // }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SocketProvider>
   );
 }
 

@@ -18,6 +18,22 @@ type category = {
   "alias": string,
   "title": string
 }
+
+export type rest = {
+  "name":string,
+  "image_url":string,
+  "is_closed":boolean,
+  "url":string,
+  "review_count":number,
+  "categories":Array<category>,
+  "rating": number,
+  "price":string,
+  "location":location,
+  "phone":string,
+  "display_phone":string,
+  "distance":number
+}
+
 const OpenURLButton = ({ url, children }: {url: string, children: any}) => {
   const handlePress = useCallback(async () => {
     // Checking if the link is supported for links with custom URL scheme.
@@ -35,20 +51,7 @@ const OpenURLButton = ({ url, children }: {url: string, children: any}) => {
   return <Button title={children} onPress={handlePress} />;
 };
 
-const Card = ( { restaurant }: {restaurant: {
-  "name":string,
-  "image_url":string,
-  "is_closed":boolean,
-  "url":string,
-  "review_count":number,
-  "categories":Array<category>,
-  "rating": number,
-  "price":string,
-  "location":location,
-  "phone":string,
-  "display_phone":string,
-  "distance":number
-}} ) => {
+const Card = ( { restaurant }: {restaurant: rest} ) => {
 
   const handleClick = () => {
     Linking.canOpenURL(restaurant.url).then(supported => {

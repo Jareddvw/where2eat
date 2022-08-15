@@ -1,4 +1,4 @@
-import React, {useState, useMemo, Ref, useEffect} from 'react'
+import React, {useState, useMemo, Ref, useEffect, useContext} from 'react'
 import {StyleSheet, View, SafeAreaView, Text, Pressable, Platform, ListViewBase } from 'react-native'
 import { Animated, PanResponder } from 'react-native';
 import { useRef } from 'react';
@@ -8,18 +8,19 @@ import Card from '../components/Card';
 import { Feather } from '@expo/vector-icons'; 
 import { Dimensions } from 'react-native';
 import sampleData from '../components/sampleData';
+import { SocketContext } from '../context/socket';
 
 const windowWidth = (Dimensions.get('window').width)
 const windowHeight = (Dimensions.get('window').height)
 
-const ChoicesPg = ({ navigation }: {navigation: any}) => {
-    
-    const fourthWindowWidth = windowWidth / 4;
+const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
 
+    const {socket, restaurants} = useContext(SocketContext)
 
-    const [restaurantList, setRestaurantList] = useState(sampleData)
-    const [rightOrLeft, setRightOrLeft] = useState(0.5)
-    const [currentIndex, setCurrentIndex] = useState(restaurantList.length - 1)
+    const [restaurantList, setRestaurantList] = useState(restaurants)
+    console.log(restaurantList)
+    const [rightOrLeft, setRightOrLeft] = useState<number>(0.5)
+    const [currentIndex, setCurrentIndex] = useState<number>(restaurantList.length - 1)
     let [animList, setAnimList] = useState(restaurantList.map((index) => {
         let mainValue = new Animated.ValueXY()
         let animatedScale = mainValue.x.interpolate({
@@ -48,6 +49,14 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
     )
 
     useEffect(() => {
+        // socket.emit('get-restaurant-list')
+        // socket.on('restaurant-list', (restaurants) => {
+        //     console.log('setting restaurants: ' + restaurants)
+        //     if (restaurants !== null) {
+        //         setRestaurantList(restaurants)
+        //     }
+        // })
+
         animateStuff(restaurantList.length)
     }, [])
 
@@ -82,7 +91,7 @@ const ChoicesPg = ({ navigation }: {navigation: any}) => {
                     Eat
                 </Text>
                 <View style={styles.partyView}>
-                    <Text style={styles.partyName}>pickyeaterparty</Text>
+                    <Text style={styles.partyName}>{route.params.roomName}</Text>
                     <Pressable style={{marginBottom: 0}} onPress={()=>{navigation.navigate("start")}}>
                         <MaterialCommunityIcons style={styles.partyName} name="exit-run" />
                     </Pressable>
