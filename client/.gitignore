@@ -12,5 +12,7 @@ web-build/
 
 .env
 
+backend/.env
+
 # macOS
 .DS_Store

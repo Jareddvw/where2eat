@@ -3,6 +3,7 @@ import YelpResults from './screens/YelpResults';
 import { NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import StartScreen from './screens/StartScreen';
+import SuccessCreatePg from './screens/SuccessCreatePg';
 import { useFonts } from '@expo-google-fonts/inter';
 import CreateRoomPg from './screens/CreateRoomPg';
 import CreatePart2 from './screens/CreatePart2';
@@ -46,6 +47,14 @@ export default function App() {
             options={{headerShown: true,
             headerTitleStyle: {
               color: 'white'
+            }}}
+          />
+          <Stack.Screen
+            name="success"
+            component={SuccessCreatePg}
+            options={{headerShown: true,
+              headerTitleStyle: {
+                color: 'white'
             }}}
           />
           <Stack.Screen

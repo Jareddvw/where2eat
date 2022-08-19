@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from "react"
-import { StyleSheet, View, Text, TextInput, Pressable, Platform, } from "react-native"
+import { StyleSheet, View, Text, TextInput, Pressable, Platform, ActivityIndicator, } from "react-native"
 import EvilIcons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -20,6 +20,7 @@ const CreatePart2 = ( { navigation, route }: {navigation:any, route:any}) => {
     let [time, setTime] = useState<Date>(addHours(0.5, new Date()))
     let [show, setShow] = useState<boolean>(false)
     let [prices, setPrices] = useState<Array<boolean>>([true, false, false, false])
+    let [showActivity, setShowActivity] = useState<boolean>(false)
 
     const {socket, setRestaurants} = useContext(SocketContext)
 
@@ -30,14 +31,17 @@ const CreatePart2 = ( { navigation, route }: {navigation:any, route:any}) => {
 
     const handleFailedCreate = useCallback((message) => {
         console.log(message)
+        setShowActivity(false)
     }, [])
     const handleSuccessfulCreate = useCallback((restaurants) => {
         console.log('successful create. Setting restaurants')
+        setShowActivity(false)
         setRestaurants(restaurants)
-        navigation.navigate("choices", {roomName:route.params.roomName})
+        navigation.navigate("success", {roomName:route.params.roomName})
     }, [])
 
     const createRoom = () => {
+        setShowActivity(true)
         console.log("create room called: " + route.params.roomName)
         socket.emit("create-room", route.params.roomName, {
             location: route.params.location,
@@ -175,6 +179,10 @@ const CreatePart2 = ( { navigation, route }: {navigation:any, route:any}) => {
             </View>
         </View>
         <Pressable style={styles.button} onPress={createRoom}>
+            {showActivity === true ?
+                <ActivityIndicator animating={true} hidesWhenStopped={true} color="white" style={styles.loading} /> :
+                <></>
+            }
             <Text style={styles.buttonTxt}>create new room</Text>
         </Pressable>
         {show === true && Platform.OS !== 'ios' ? (
@@ -268,6 +276,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     button: {
+        flexDirection:'row-reverse',
         alignItems:'center',
         justifyContent:'center',
         backgroundColor: "rgba(255,64,64,1)",
@@ -327,6 +336,10 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         fontFamily:'Inter',
         fontSize:13,
+    },
+    loading: {
+        position:'absolute',
+        left: 20
     }
 })
 

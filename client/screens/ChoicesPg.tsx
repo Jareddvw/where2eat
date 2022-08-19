@@ -105,22 +105,21 @@ const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
                             <TinderCard 
                                 key={index}
                                 preventSwipe={['up', 'down']}
-                                swipeRequirementType={"velocity"}
-                                swipeThreshold={1}
-                                // onSwipeRequirementFulfilled = {(dir) => {
-                                //     if (dir === 'left') {
-                                //         setRightOrLeft(0)
-                                //     } else if (dir === 'right') {
-                                //         setRightOrLeft(1)
-                                //     }
-                                // }}
-                                // onSwipeRequirementUnfulfilled = {() => {
-                                //     setRightOrLeft(0.5)
-                                // }}
+                                swipeRequirementType="position"
+                                onSwipeRequirementFulfilled = {(dir) => {
+                                    if (dir === 'left') {
+                                        setRightOrLeft(0)
+                                    } else if (dir === 'right') {
+                                        setRightOrLeft(1)
+                                    }
+                                }}
+                                onSwipeRequirementUnfulfilled = {() => {
+                                    setRightOrLeft(0.5)
+                                }}
                                 onSwipe={(dir) => {
                                     animateStuff(index)
                                     setCurrentIndex(index - 1)
-                                    // setRightOrLeft(0.5)
+                                    setRightOrLeft(0.5)
                                     // need to add stuff to remove the old cards
                                 }}
                                 ref={childRefs[index]}
@@ -154,7 +153,7 @@ const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
                     style={[
                         styles.button, 
                         styles.redButton,
-                        // {opacity: (rightOrLeft < 0.5 ? 1 : 0.33)}
+                        {opacity: (rightOrLeft < 0.5 ? 1 : 0.33)}
                         ]}
                     onPress={()=>swipe('left', currentIndex)}
                     >
@@ -163,7 +162,7 @@ const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
                 <Pressable style={[
                         styles.button,
                         styles.greenButton,
-                        // {opacity: (rightOrLeft > 0.5 ? 1 : 0.33)}
+                        {opacity: (rightOrLeft > 0.5 ? 1 : 0.33)}
                     ]}
                     onPress={()=>swipe('right', currentIndex)}
                     >
