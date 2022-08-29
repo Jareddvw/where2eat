@@ -13,7 +13,16 @@ import { useEffect } from 'react';
 import { SocketContext, socket, SocketProvider } from './context/socket';
 import JoinRoom from './screens/JoinRoom';
 
-const Stack = createNativeStackNavigator();
+export type RootStackParams = {
+  Start: undefined,
+  Create1: undefined,
+  Create2: {location:string; food:string; roomName:string},
+  Success: {roomName:string},
+  Choices: {roomName:string; username:string},
+  Join: undefined,
+}
+
+const Stack = createNativeStackNavigator<RootStackParams>()
 
 export default function App() {
 
@@ -31,11 +40,11 @@ export default function App() {
         <Stack.Navigator screenOptions={{
           headerShown: false }} >
           <Stack.Screen 
-            name="start"
+            name="Start"
             component = {StartScreen}
           />
           <Stack.Screen
-            name="create room screen"
+            name="Create1"
             component={CreateRoomPg}
             options={{headerShown: true,
             headerTitleStyle: {
@@ -43,7 +52,7 @@ export default function App() {
             }}}
           />
           <Stack.Screen
-            name="create part 2"
+            name="Create2"
             component={CreatePart2}
             options={{headerShown: true,
             headerTitleStyle: {
@@ -51,7 +60,7 @@ export default function App() {
             }}}
           />
           <Stack.Screen
-            name="success"
+            name="Success"
             component={SuccessCreatePg}
             options={{headerShown: true,
               headerTitleStyle: {
@@ -59,7 +68,7 @@ export default function App() {
             }}}
           />
           <Stack.Screen
-            name="join room"
+            name="Join"
             component={JoinRoom}
             options={{headerShown: true,
               headerTitleStyle: {
@@ -67,15 +76,8 @@ export default function App() {
             }}}
           />
           <Stack.Screen
-            name="choices"
+            name="Choices"
             component={ChoicesPg}
-            // options={{
-            //   headerShown: true,
-            //   headerTitleStyle: {
-            //     color: 'white'
-            //   },
-            //   headerBackTitle: 'Back'
-            // }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -4,16 +4,21 @@ import { Animated, PanResponder } from 'react-native';
 import { useRef } from 'react';
 import TinderCard from 'react-tinder-card';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-import Card from '../components/Card';
+import Card, { rest } from '../components/Card';
 import { Feather } from '@expo/vector-icons'; 
 import { Dimensions } from 'react-native';
 import sampleData from '../components/sampleData';
 import { SocketContext } from '../context/socket';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParams } from '../App';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = (Dimensions.get('window').width)
 const windowHeight = (Dimensions.get('window').height)
 
-const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
+type choicesProps = NativeStackScreenProps<RootStackParams, "Choices", "Stack">
+
+const ChoicesPg = ({ route, navigation }: choicesProps) => {
 
     const {socket, restaurants} = useContext(SocketContext)
 
@@ -49,8 +54,8 @@ const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
     )
 
     const leaveRoom = () => {
-        socket.emit("leave-room", route.params.roomName)
-        navigation.navigate("start")
+        socket.emit("leave-room", route.params.roomName);
+        navigation.navigate("Start")
     }
 
     useEffect(() => {
@@ -104,8 +109,8 @@ const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
                 <Text style={styles.userName}>{route.params.username}</Text>
             </View>
             <View style={styles.cardSection}>
-                {animList.length === 0 ? <></> :   
-                restaurantList.map((restaurant:any, index) => {
+                {animList.length === 0 ? <></> :
+                restaurantList.map((restaurant:rest, index) => {
                         return (
                             <TinderCard 
                                 key={index}

@@ -6,8 +6,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from '@expo/vector-icons'; 
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParams } from "../App";
 
-const SuccessCreatePg = ({ navigation, route }: {navigation:any, route:any}) => {
+type successProps = NativeStackScreenProps<RootStackParams, "Success", "Stack">
+
+const SuccessCreatePg = ({ navigation, route }: successProps) => {
 
     let [username, setUsername] = useState<string>("")
 
@@ -40,7 +44,7 @@ const SuccessCreatePg = ({ navigation, route }: {navigation:any, route:any}) => 
         <Pressable 
             style={styles.button}
             onPress={() => {
-                navigation.navigate("choices", 
+                navigation.navigate("Choices", 
                 {
                     roomName:route.params.roomName,
                     username:username

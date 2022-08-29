@@ -1,8 +1,12 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useFonts } from '@expo-google-fonts/inter';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParams } from '../App';
 
-const StartScreen = ( {navigation}:{navigation: any} ) => {
+type startProps = NativeStackScreenProps<RootStackParams, "Start", "Stack">
+
+const StartScreen = ( {navigation}:startProps ) => {
 
   return (
     <SafeAreaView style={styles.container}>
@@ -15,10 +19,10 @@ const StartScreen = ( {navigation}:{navigation: any} ) => {
             Eat
         </Text>
         </View>
-      <Pressable style={styles.button} onPress={() => navigation.navigate("create room screen")}>
+      <Pressable style={styles.button} onPress={() => navigation.navigate("Create1")}>
         <Text style={styles.buttonTxt}>create a room</Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => navigation.navigate("join room")}>
+      <Pressable style={styles.button} onPress={() => navigation.navigate("Join")}>
         <Text style={styles.buttonTxt}>join a room</Text>
       </Pressable>
       <Pressable style={styles.button}>

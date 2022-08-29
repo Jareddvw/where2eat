@@ -8,8 +8,12 @@ import { Ionicons } from '@expo/vector-icons';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Slider from '@react-native-community/slider';
 import { SocketContext } from "../context/socket";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParams } from "../App";
 
-const CreatePart2 = ( { navigation, route }: {navigation:any, route:any}) => {
+type create2Props = NativeStackScreenProps<RootStackParams, "Create2", "Stack">
+
+const CreatePart2 = ( { navigation, route }: create2Props) => {
 
     let addHours = function(h: number, date:Date) {
         date.setTime(date.getTime() + (h*60*60*1000));
@@ -37,7 +41,7 @@ const CreatePart2 = ( { navigation, route }: {navigation:any, route:any}) => {
         console.log('successful create. Setting restaurants')
         setShowActivity(false)
         setRestaurants(restaurants)
-        navigation.navigate("success", {roomName:route.params.roomName})
+        navigation.navigate("Success", {roomName:route.params.roomName})
     }, [])
 
     const createRoom = () => {

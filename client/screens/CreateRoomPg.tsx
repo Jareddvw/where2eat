@@ -5,14 +5,16 @@ import EvilIcons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParams } from "../App";
 
+type create1Props = NativeStackScreenProps<RootStackParams, "Create1", "Stack">
 
-const CreateRoomPg = ({ navigation }: {navigation: any}) => {
+const CreateRoomPg = ({ navigation }: create1Props) => {
 
     let [location, setLocation] = useState<string>("")
     let [food, setFood] = useState<string>("")
     let [roomName, setRoomName] = useState<string>("")
-
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
@@ -55,9 +57,9 @@ const CreateRoomPg = ({ navigation }: {navigation: any}) => {
         </View>
         <Pressable 
             style={styles.button}
-            onPress={() => navigation.navigate("create part 2", {
+            onPress={() => navigation.navigate("Create2", {
                 roomName:roomName,
-                food:[food],
+                food:food,
                 location:location
             })}>
             <Text style={styles.buttonTxt}>next step</Text>

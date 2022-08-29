@@ -6,9 +6,12 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SocketContext } from "../context/socket";
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParams } from "../App";
 
+type joinProps = NativeStackScreenProps<RootStackParams, "Join", "Stack">
 
-const JoinRoom = ({ navigation, route }: {navigation: any, route:any}) => {
+const JoinRoom = ({ navigation, route }: joinProps) => {
 
     let [username, setUsername] = useState<string>("")
     let [roomName, setRoomName] = useState<string>("")
@@ -19,7 +22,7 @@ const JoinRoom = ({ navigation, route }: {navigation: any, route:any}) => {
     useEffect(() => {
         socket.on("restaurant-list", (rests) => {
                 setRestaurants(rests)
-                navigation.navigate("choices", {
+                navigation.navigate("Choices", {
                     roomName:roomName,
                     username:username
                 })
