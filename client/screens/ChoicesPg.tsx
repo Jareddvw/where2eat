@@ -1,17 +1,13 @@
 import React, {useState, useMemo, Ref, useEffect, useContext} from 'react'
-import {StyleSheet, View, SafeAreaView, Text, Pressable, Platform, ListViewBase } from 'react-native'
-import { Animated, PanResponder } from 'react-native';
-import { useRef } from 'react';
+import {StyleSheet, View, SafeAreaView, Text, Pressable, Platform, Animated } from 'react-native'
 import TinderCard from 'react-tinder-card';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import Card, { rest } from '../components/Card';
 import { Feather } from '@expo/vector-icons'; 
 import { Dimensions } from 'react-native';
-import sampleData from '../components/sampleData';
 import { SocketContext } from '../context/socket';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParams } from '../App';
-import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = (Dimensions.get('window').width)
 const windowHeight = (Dimensions.get('window').height)
@@ -20,10 +16,10 @@ type choicesProps = NativeStackScreenProps<RootStackParams, "Choices", "Stack">
 
 const ChoicesPg = ({ route, navigation }: choicesProps) => {
 
-    const {socket, restaurants} = useContext(SocketContext)
+    const {socket, restaurants, setRestaurants} = useContext(SocketContext)
 
     const [restaurantList, setRestaurantList] = useState(restaurants)
-    console.log(restaurantList)
+    console.log("restaurant list has " + restaurantList.length + " items.")
     const [rightOrLeft, setRightOrLeft] = useState<number>(0.5)
     const [currentIndex, setCurrentIndex] = useState<number>(restaurantList.length - 1)
     let [animList, setAnimList] = useState(restaurantList.map((index) => {
@@ -55,20 +51,22 @@ const ChoicesPg = ({ route, navigation }: choicesProps) => {
 
     const leaveRoom = () => {
         socket.emit("leave-room", route.params.roomName);
+        setRestaurants([])
         navigation.navigate("Start")
     }
 
     useEffect(() => {
-        // socket.emit('get-restaurant-list')
-        // socket.on('restaurant-list', (restaurants) => {
-        //     console.log('setting restaurants: ' + restaurants)
-        //     if (restaurants !== null) {
-        //         setRestaurantList(restaurants)
-        //     }
-        // })
-
         animateStuff(restaurantList.length)
     }, [])
+
+    useEffect(() => {
+        if (currentIndex < 0) {
+            navigation.navigate("Results", {
+                roomName:route.params.roomName,
+                username:route.params.username
+            })
+        }
+    }, [currentIndex])
 
     const swipe = async (dir:string, index:number) => {
         if (currentIndex < 0) return;
@@ -116,6 +114,7 @@ const ChoicesPg = ({ route, navigation }: choicesProps) => {
                                 key={index}
                                 preventSwipe={['up', 'down']}
                                 swipeRequirementType="position"
+                                swipeThreshold={windowWidth / 3}
                                 onSwipeRequirementFulfilled = {(dir) => {
                                     if (dir === 'left') {
                                         setRightOrLeft(0)

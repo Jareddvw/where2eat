@@ -39,7 +39,9 @@ const CreatePart2 = ( { navigation, route }: create2Props) => {
     }, [])
     const handleSuccessfulCreate = useCallback((restaurants) => {
         console.log('successful create. Setting restaurants')
-        setShowActivity(false)
+        if (showActivity) {
+            setShowActivity(false)
+        }
         setRestaurants(restaurants)
         navigation.navigate("Success", {roomName:route.params.roomName})
     }, [])

@@ -32,7 +32,9 @@ export type rest = {
   "location":location,
   "phone":string,
   "display_phone":string,
-  "distance":number
+  "distance":number,
+  "yeses":Array<string>,
+  "nos":Array<string>
 }
 
 const OpenURLButton = ({ url, children }: {url: string, children: any}) => {

@@ -5,6 +5,8 @@ import { useState } from "react";
 import { rest } from "../components/Card";
 
 export const socket = io(SOCKET_URL);
+console.log(socket)
+
 export const SocketContext = createContext({socket:socket, restaurants:[
     {
     // "id": "J7_-faNq_Ag9qTOlDn81Pw",

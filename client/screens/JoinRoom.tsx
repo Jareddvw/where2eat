@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react"
+import React, {useState, useEffect, useContext, useCallback} from "react"
 import { StyleSheet, View, Text, TextInput, Pressable, Alert, } from "react-native"
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
@@ -13,29 +13,32 @@ type joinProps = NativeStackScreenProps<RootStackParams, "Join", "Stack">
 
 const JoinRoom = ({ navigation, route }: joinProps) => {
 
-    let [username, setUsername] = useState<string>("")
-    let [roomName, setRoomName] = useState<string>("")
+    let [user, setUser] = useState<string>("")
+    let [room, setRoom] = useState<string>("")
     let [errorMessage, setErrorMessage] = useState<string>("")
 
-    const {socket, setRestaurants} = useContext(SocketContext)
+    const {socket, restaurants, setRestaurants} = useContext(SocketContext)
 
     useEffect(() => {
-        socket.on("restaurant-list", (rests) => {
-                setRestaurants(rests)
-                navigation.navigate("Choices", {
-                    roomName:roomName,
-                    username:username
-                })
-            })
         socket.on("error", (message) => {
             setErrorMessage(message)
         })
     }, [])
 
     useEffect(() => {
+        if (restaurants.length == 0) return;
+        // should then navigate to Choices once get-restaurants is emitted and restaurant-list is returned
+        navigation.navigate("Choices", {
+            roomName:room,
+            username:user
+        })
+    }, [restaurants])
+
+    useEffect(() => {
         if (errorMessage !== "") {
             Alert.alert(errorMessage, "", [{text: "OK"}])
         }
+        setErrorMessage("")
     }, [errorMessage])
 
   return (
@@ -49,8 +52,7 @@ const JoinRoom = ({ navigation, route }: joinProps) => {
                     style={styles.input}
                     placeholder="pickyeaterparty"
                     onChangeText={(roomName)=>{
-                        setErrorMessage("")
-                        setRoomName(roomName)}
+                        setRoom(roomName)}
                     }
                     underlineColorAndroid="transparent"
                 />
@@ -64,8 +66,7 @@ const JoinRoom = ({ navigation, route }: joinProps) => {
                     style={styles.input}
                     placeholder="tacolover99"
                     onChangeText={(name)=>{
-                        setErrorMessage("")
-                        setUsername(name)
+                        setUser(name)
                     }}
                     underlineColorAndroid="transparent"
                 />
@@ -74,7 +75,7 @@ const JoinRoom = ({ navigation, route }: joinProps) => {
         <Pressable 
             style={styles.button}
             onPress={() => {
-                if (roomName == "") {
+                if (room == "") {
                     Alert.alert(
                         "Enter a room name!",
                         "",
@@ -82,7 +83,7 @@ const JoinRoom = ({ navigation, route }: joinProps) => {
                           { text: "OK" }
                         ]
                     )
-                } else if (username == "") {
+                } else if (user == "") {
                     Alert.alert(
                         "Enter a username!",
                         "",
@@ -91,7 +92,7 @@ const JoinRoom = ({ navigation, route }: joinProps) => {
                         ]
                     )
                 } else {
-                    socket.emit("join-room", roomName)
+                    socket.emit("join-room", room)
                 }
             }}>
             <Text style={styles.buttonTxt}>join room</Text>

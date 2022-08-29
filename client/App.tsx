@@ -12,6 +12,7 @@ import io from 'socket.io-client';
 import { useEffect } from 'react';
 import { SocketContext, socket, SocketProvider } from './context/socket';
 import JoinRoom from './screens/JoinRoom';
+import Results from './screens/Results';
 
 export type RootStackParams = {
   Start: undefined,
@@ -20,6 +21,7 @@ export type RootStackParams = {
   Success: {roomName:string},
   Choices: {roomName:string; username:string},
   Join: undefined,
+  Results: {roomName:string, username:string}
 }
 
 const Stack = createNativeStackNavigator<RootStackParams>()
@@ -78,6 +80,10 @@ export default function App() {
           <Stack.Screen
             name="Choices"
             component={ChoicesPg}
+          />
+          <Stack.Screen
+            name="Results"
+            component={Results}
           />
         </Stack.Navigator>
       </NavigationContainer>
