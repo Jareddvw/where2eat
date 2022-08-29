@@ -46,7 +46,7 @@ const CreatePart2 = ( { navigation, route }: {navigation:any, route:any}) => {
         socket.emit("create-room", route.params.roomName, {
             location: route.params.location,
             radius: parseInt(distance * 1609.344 + ""),
-            categories: route.params.food,
+            term: route.params.food,
             open_at: Math.floor(time.getTime() / 1000),
             price: getPricesArray()
         })

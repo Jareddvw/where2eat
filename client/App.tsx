@@ -11,6 +11,7 @@ import ChoicesPg from './screens/ChoicesPg';
 import io from 'socket.io-client';
 import { useEffect } from 'react';
 import { SocketContext, socket, SocketProvider } from './context/socket';
+import JoinRoom from './screens/JoinRoom';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,14 @@ export default function App() {
           <Stack.Screen
             name="success"
             component={SuccessCreatePg}
+            options={{headerShown: true,
+              headerTitleStyle: {
+                color: 'white'
+            }}}
+          />
+          <Stack.Screen
+            name="join room"
+            component={JoinRoom}
             options={{headerShown: true,
               headerTitleStyle: {
                 color: 'white'

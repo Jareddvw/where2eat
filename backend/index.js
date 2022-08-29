@@ -28,23 +28,25 @@ io.on('connection', (socket) => {
   socket.on('create-room', (roomName, settings) => {
     console.log("create room called")
     if (roomName in rooms) {
-      socket.emit("error", "room already exists");
+      socket.emit("error", roomName + " already exists.");
     } else {
-      client.search({
-        term: 'restaurants',
+      let searchSettings = {
         limit: 20,
         location: settings.location,
         radius: settings.radius,
-        categories: settings.categories,
+        term: settings.term,
         open_at: settings.open_at,
         price: settings.price
-      }).then(response => {
+      }
+      console.log(searchSettings.term)
+      client.search(
+          searchSettings
+        ).then(response => {
         console.log(roomName + ": room created!")
-        rooms[roomName] = response.jsonBody.businesses
-        console.log(response.jsonBody.businesses)
+        rooms[roomName] = response.jsonBody.businesses.reverse()
         socket.emit('successfully created room!', response.jsonBody.businesses)
       }).catch(e => {
-        socket.emit('error', 'failed room creation.')
+        socket.emit('error', 'Failed to create room ' + roomName + '.')
         console.log(e);
       });
     }
@@ -61,12 +63,18 @@ io.on('connection', (socket) => {
     socket.emit(rooms[roomName])
   })
   
-  socket.on('join-room', (socket, roomName) => {
-    if (!rooms.includes(roomName)) {
-      socket.emit("error", "room does not exist")
+  socket.on('join-room', (roomName) => {
+    if (!(roomName in rooms)) {
+      socket.emit("error", "That room does not exist!")
     } else {
       socket.join(roomName)
+      socket.emit('restaurant-list', rooms[roomName])
     }
+  })
+
+  socket.on('leave-room', (roomName) => {
+    console.log("user left " + roomName)
+    socket.leave(roomName)
   })
 });
 

@@ -18,7 +18,7 @@ const StartScreen = ( {navigation}:{navigation: any} ) => {
       <Pressable style={styles.button} onPress={() => navigation.navigate("create room screen")}>
         <Text style={styles.buttonTxt}>create a room</Text>
       </Pressable>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={() => navigation.navigate("join room")}>
         <Text style={styles.buttonTxt}>join a room</Text>
       </Pressable>
       <Pressable style={styles.button}>

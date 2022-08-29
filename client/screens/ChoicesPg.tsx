@@ -48,6 +48,11 @@ const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
         []
     )
 
+    const leaveRoom = () => {
+        socket.emit("leave-room", route.params.roomName)
+        navigation.navigate("start")
+    }
+
     useEffect(() => {
         // socket.emit('get-restaurant-list')
         // socket.on('restaurant-list', (restaurants) => {
@@ -92,11 +97,11 @@ const ChoicesPg = ({ navigation, route }: {navigation: any, route:any}) => {
                 </Text>
                 <View style={styles.partyView}>
                     <Text style={styles.partyName}>{route.params.roomName}</Text>
-                    <Pressable style={{marginBottom: 0}} onPress={()=>{navigation.navigate("start")}}>
+                    <Pressable style={{marginBottom: 0}} onPress={leaveRoom}>
                         <MaterialCommunityIcons style={styles.partyName} name="exit-run" />
                     </Pressable>
                 </View>
-                <Text style={styles.userName}>tacolover99</Text>
+                <Text style={styles.userName}>{route.params.username}</Text>
             </View>
             <View style={styles.cardSection}>
                 {animList.length === 0 ? <></> :   

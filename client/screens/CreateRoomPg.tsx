@@ -30,12 +30,12 @@ const CreateRoomPg = ({ navigation }: {navigation: any}) => {
             </View>
         </View>
         <View style={styles.inputArea}>
-            <Text style={styles.captionText}>Any food categories?</Text>
+            <Text style={styles.captionText}>Food type?</Text>
             <View style={styles.searchSection}>
                 <MaterialCommunityIcons style={styles.searchIcon} name="silverware-fork-knife" size={20} color="black"/>
                 <TextInput
                     style={styles.input}
-                    placeholder="tacos"
+                    placeholder="Mexican"
                     onChangeText={(food)=>{setFood(food)}}
                     underlineColorAndroid="transparent"
                 />
