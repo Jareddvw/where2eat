@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 import { SocketContext } from '../context/socket';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CommonActions } from '@react-navigation/native';
 import { RootStackParams } from '../App';
 
 const windowWidth = (Dimensions.get('window').width)
@@ -50,21 +51,34 @@ const ChoicesPg = ({ route, navigation }: choicesProps) => {
     )
 
     const leaveRoom = () => {
+        const resetAction = CommonActions.reset({
+            index: 0,
+            routes: [{name: "Start", params: {
+                roomName: route.params.roomName,
+                username: route.params.username
+            }}],
+          });
         socket.emit("leave-room", route.params.roomName);
         setRestaurants([])
-        navigation.navigate("Start")
+        navigation.dispatch(resetAction)
     }
 
     useEffect(() => {
         animateStuff(restaurantList.length)
     }, [])
 
+    // after we're done with the choices page, going back should only take us to the start screen.
     useEffect(() => {
         if (currentIndex < 0) {
-            navigation.navigate("Results", {
-                roomName:route.params.roomName,
-                username:route.params.username
-            })
+            navigation.dispatch(CommonActions.reset({
+                index: 1,
+                routes: [{name: "Start"},
+                {name: "Results", params: {
+                    roomName: route.params.roomName,
+                    username: route.params.username
+                }}
+                ],
+            }))
         }
     }, [currentIndex])
 

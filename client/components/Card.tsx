@@ -20,13 +20,21 @@ type category = {
   "title": string
 }
 
+type coord = {
+  "latitude": number,
+  "longitude": number
+}
+
 export type rest = {
+  "id": string,
+  "alias":string,
   "name":string,
   "image_url":string,
   "is_closed":boolean,
   "url":string,
   "review_count":number,
   "categories":Array<category>,
+  "coordinates": coord
   "rating": number,
   "price":string,
   "location":location,

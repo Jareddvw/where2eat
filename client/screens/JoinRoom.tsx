@@ -26,7 +26,7 @@ const JoinRoom = ({ navigation, route }: joinProps) => {
     }, [])
 
     useEffect(() => {
-        if (restaurants.length == 0) return;
+        if (restaurants.length == 0 || restaurants[0]["id"] === "sample") return;
         // should then navigate to Choices once get-restaurants is emitted and restaurant-list is returned
         navigation.navigate("Choices", {
             roomName:room,

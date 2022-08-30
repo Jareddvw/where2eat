@@ -1,7 +1,8 @@
+import { rest } from "./Card"
 
-const sampleData = [
+const sampleData: Array<rest> = [
 {
-    "id": "J7_-faNq_Ag9qTOlDn81Pw",
+    "id": "sample",
     "alias": "starbelly-san-francisco",
     "name": "Starbelly",
     "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/G1SweY3VbKx_BqAws9RytA/o.jpg",
@@ -48,7 +49,9 @@ const sampleData = [
     },
     "phone": "+14152527500",
     "display_phone": "(415) 252-7500",
-    "distance": 490.0201155034338
+    "distance": 490.0201155034338,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "lUUQi1b2rV3glIn4t2I1Iw",
@@ -93,7 +96,9 @@ const sampleData = [
     },
     "phone": "+14158171939",
     "display_phone": "(415) 817-1939",
-    "distance": 1514.8624498232032
+    "distance": 1514.8624498232032,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "qfRZjzNqO3fRgEGqvGNY-A",
@@ -137,7 +142,9 @@ const sampleData = [
     },
     "phone": "+14158964496",
     "display_phone": "(415) 896-4496",
-    "distance": 603.8917617486115
+    "distance": 603.8917617486115,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "reXWH9Wo0ZTOuQsTMNOSxg",
@@ -186,7 +193,9 @@ const sampleData = [
     },
     "phone": "+14155902404",
     "display_phone": "(415) 590-2404",
-    "distance": 158.7823750404592
+    "distance": 158.7823750404592,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "IoTaMS3mnLh5vq4nfW1y_A",
@@ -235,7 +244,9 @@ const sampleData = [
     },
     "phone": "+14156243171",
     "display_phone": "(415) 624-3171",
-    "distance": 172.53974199177622
+    "distance": 172.53974199177622,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "OOlS_RmdMk1LHtgOQWoHoA",
@@ -276,7 +287,9 @@ const sampleData = [
     },
     "phone": "+14156243238",
     "display_phone": "(415) 624-3238",
-    "distance": 159.10650212292109
+    "distance": 159.10650212292109,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "LjVlsV9tKGnv7e4Iyt9c5Q",
@@ -324,7 +337,9 @@ const sampleData = [
     },
     "phone": "+14154004623",
     "display_phone": "(415) 400-4623",
-    "distance": 197.0605128915999
+    "distance": 197.0605128915999,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "055dTcfz2AOAFPed_2KjEQ",
@@ -364,7 +379,9 @@ const sampleData = [
     },
     "phone": "+14154370303",
     "display_phone": "(415) 437-0303",
-    "distance": 1411.7774969689415
+    "distance": 1411.7774969689415,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "BjlVE7tTp1UCEttgkM1Big",
@@ -412,7 +429,9 @@ const sampleData = [
     },
     "phone": "+14157030270",
     "display_phone": "(415) 703-0270",
-    "distance": 1074.0792339472885
+    "distance": 1074.0792339472885,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 },
 {
     "id": "TlBFKt2N2eSEBpN-UZmDBw",
@@ -461,7 +480,10 @@ const sampleData = [
     },
     "phone": "+14157501111",
     "display_phone": "(415) 750-1111",
-    "distance": 1659.4286084394544
+    "distance": 1659.4286084394544,
+    'yeses':["bob", "alice", "eve"],
+    "nos":["alex", 'bobby', 'charlie']
 }
 ]
+
 export default sampleData
