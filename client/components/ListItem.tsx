@@ -48,7 +48,27 @@ const ListItem = ({
       // by some browser in the mobile
       await Linking.openURL(restaurant.url);
     } else {
-      Alert.alert(`Don't know how to open this URL: ${restaurant.url}`);
+      Alert.alert(`Don't know how to open this URL: ${restaurant.url}`, "", [
+        { text: "OK" },
+      ]);
+    }
+  };
+
+  const handlePhonePress = async () => {
+    const supported = await Linking.canOpenURL(`tel:${restaurant.phone}`);
+    if (supported) {
+      await Linking.openURL(`tel:${restaurant.phone}`);
+    }
+  };
+
+  const handleAddressPress = async () => {
+    const supported = await Linking.canOpenURL(
+      `maps://?q=${restaurant.coordinates.latitude},${restaurant.coordinates.longitude}`
+    );
+    if (supported) {
+      await Linking.openURL(
+        `maps://?q=${restaurant.coordinates.latitude},${restaurant.coordinates.longitude}`
+      );
     }
   };
 
@@ -132,7 +152,22 @@ const ListItem = ({
               </Text>
             </View>
             <View style={styles.emptyStars}>
-              <Pressable onPress={handlePress} style={{ marginRight: 5 }}>
+              <Pressable
+                onPress={() => {
+                  Alert.alert(
+                    "This link will take you to Yelp.",
+                    "Are you sure?",
+                    [
+                      {
+                        text: "Yes, take me there!",
+                        onPress: () => handlePress(),
+                      },
+                      { text: "Cancel" },
+                    ]
+                  );
+                }}
+                style={{ marginRight: 5 }}
+              >
                 <FontAwesome5 name="yelp" size={20} color="#FF4040" />
               </Pressable>
             </View>
@@ -152,10 +187,28 @@ const ListItem = ({
             >
               {restaurant.is_closed === true ? "Closed" : "Open now"}
             </Text>
-            <Text>{restaurant.display_phone}</Text>
+            <Pressable onPress={handlePhonePress}>
+              <Text>{restaurant.display_phone}</Text>
+            </Pressable>
           </View>
           <View style={styles.location}>
-            <Text>{restaurant.location?.display_address.join(", ")}</Text>
+            <Pressable
+              onPress={() => {
+                Alert.alert(
+                  "This link will take you to Maps.",
+                  "Are you sure?",
+                  [
+                    {
+                      text: "Yes, take me there!",
+                      onPress: () => handleAddressPress(),
+                    },
+                    { text: "Cancel" },
+                  ]
+                );
+              }}
+            >
+              <Text>{restaurant.location?.display_address.join(", ")}</Text>
+            </Pressable>
           </View>
         </Animated.View>
       )}
@@ -185,7 +238,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "Inter",
     marginBottom: 6,
   },

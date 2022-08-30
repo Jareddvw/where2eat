@@ -38,12 +38,15 @@ io.on('connection', (socket) => {
         open_at: settings.open_at,
         price: settings.price
       }
-      console.log(searchSettings.term)
       client.search(
           searchSettings
         ).then(response => {
         console.log(roomName + ": room created!")
         rooms[roomName] = response.jsonBody.businesses.reverse()
+        for (const restaurant of rooms[roomName]) {
+          restaurant["yeses"] = []
+          restaurant["nos"] = []
+        }
         socket.emit('successfully created room!', response.jsonBody.businesses)
       }).catch(e => {
         socket.emit('error', 'Failed to create room ' + roomName + '.')
@@ -76,6 +79,14 @@ io.on('connection', (socket) => {
     console.log("user left " + roomName)
     socket.leave(roomName)
   })
+
+  socket.on('yes-vote', (roomName, index, username) => {
+    rooms[roomName][index]['yeses'].push(username)
+  })
+  socket.on('no-vote', (roomName, index, username) => {
+    rooms[roomName][index]['nos'].push(username)
+  })
+
 });
 
 // io.on('disconnect', ())

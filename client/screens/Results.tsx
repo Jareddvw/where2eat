@@ -20,7 +20,6 @@ type resultsProps = NativeStackScreenProps<RootStackParams, "Results", "Stack">;
 
 const Results = ({ navigation, route }: resultsProps) => {
   let { socket, restaurants, setRestaurants } = useContext(SocketContext);
-  restaurants = sampleData;
 
   const leaveRoom = () => {
     const resetAction = CommonActions.reset({
