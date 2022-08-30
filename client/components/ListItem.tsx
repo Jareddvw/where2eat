@@ -94,21 +94,21 @@ const ListItem = ({
           </View>
           <View style={styles.right}>
             <View style={styles.empty}></View>
-            {restaurant.nos.length + restaurant.yeses.length <= 15 ? (
+            {restaurant.nos.size + restaurant.yeses.size <= 15 ? (
               <View style={styles.dotArea}>
-                {restaurant.yeses.map((yes) => {
+                {Array.from(restaurant.yeses).map((yes) => {
                   return <View style={[styles.dot, styles.yesDot]}></View>;
                 })}
-                {restaurant.nos.map((no) => {
+                {Array.from(restaurant.nos).map((no) => {
                   return <View style={[styles.dot, styles.noDot]}></View>;
                 })}
               </View>
             ) : (
               <View style={styles.dotArea}>
-                {restaurant.yeses.map((yes) => {
+                {Array.from(restaurant.yeses).map((yes) => {
                   return <View style={[styles.line, styles.yesDot]}></View>;
                 })}
-                {restaurant.nos.map((no) => {
+                {Array.from(restaurant.nos).map((no) => {
                   return <View style={[styles.line, styles.noDot]}></View>;
                 })}
               </View>

@@ -47,7 +47,7 @@ const Results = ({ navigation, route }: resultsProps) => {
         </View>
         <Text style={styles.members}>
           {restaurants[0].yeses && restaurants[0].nos
-            ? restaurants[0].yeses.length + restaurants[0].nos.length
+            ? restaurants[0].yeses.size + restaurants[0].nos.size
             : 0}{" "}
           members
         </Text>

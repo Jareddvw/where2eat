@@ -44,8 +44,8 @@ io.on('connection', (socket) => {
         console.log(roomName + ": room created!")
         rooms[roomName] = response.jsonBody.businesses.reverse()
         for (const restaurant of rooms[roomName]) {
-          restaurant["yeses"] = []
-          restaurant["nos"] = []
+          restaurant["yeses"] = new Set()
+          restaurant["nos"] = new Set()
         }
         socket.emit('successfully created room!', response.jsonBody.businesses)
       }).catch(e => {
@@ -81,12 +81,11 @@ io.on('connection', (socket) => {
   })
 
   socket.on('yes-vote', (roomName, index, username) => {
-    rooms[roomName][index]['yeses'].push(username)
+    rooms[roomName][index]['yeses'].add(username)
   })
   socket.on('no-vote', (roomName, index, username) => {
-    rooms[roomName][index]['nos'].push(username)
+    rooms[roomName][index]['nos'].add(username)
   })
-
 });
 
 // io.on('disconnect', ())
