@@ -44,8 +44,8 @@ io.on('connection', (socket) => {
         console.log(roomName + ": room created!")
         rooms[roomName] = response.jsonBody.businesses.reverse()
         for (const restaurant of rooms[roomName]) {
-          restaurant["yeses"] = new Set()
-          restaurant["nos"] = new Set()
+          restaurant["yeses"] = []
+          restaurant["nos"] = []
         }
         socket.emit('successfully created room!', response.jsonBody.businesses)
       }).catch(e => {
@@ -62,8 +62,15 @@ io.on('connection', (socket) => {
   })
 
   socket.on('get-results', (roomName) => {
-    rooms[roomName].sort((a,b) => a.votes > b.votes ? 1 : -1)
-    socket.emit(rooms[roomName])
+    rooms[roomName].sort((a,b) => {
+      if (a.yeses.length < b.yeses.length) {
+        return 1
+      } else if (a.yeses.length == b.yeses.length) {
+        return (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)
+      } else {
+        return -1
+      }})
+    socket.emit('results-list', rooms[roomName])
   })
   
   socket.on('join-room', (roomName) => {
@@ -81,10 +88,12 @@ io.on('connection', (socket) => {
   })
 
   socket.on('yes-vote', (roomName, index, username) => {
-    rooms[roomName][index]['yeses'].add(username)
+    if (rooms[roomName][index]['yeses'].includes(username)) return;
+    rooms[roomName][index]['yeses'].push(username)
   })
   socket.on('no-vote', (roomName, index, username) => {
-    rooms[roomName][index]['nos'].add(username)
+    if (rooms[roomName][index]['nos'].includes(username)) return;
+    rooms[roomName][index]['nos'].push(username)
   })
 });
 

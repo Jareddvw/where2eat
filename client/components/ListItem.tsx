@@ -30,14 +30,16 @@ const ListItem = ({
   const [emoji, setEmoji] = useState<string>("🍴");
 
   useEffect(() => {
+    let emoji = "🍴";
     for (let i = 0; i < restaurant.categories.length; i += 1) {
       if (emoji !== "🍴") return;
       var alias: string = restaurant.categories[i]["alias"];
       if (alias in emojiMap && emojiMap[alias] !== "") {
+        emoji = emojiMap[alias];
         setEmoji(emojiMap[alias]);
       }
     }
-  }, []);
+  }, [restaurant]);
 
   const handlePress = async () => {
     // Checking if the link is supported for links with custom URL scheme.
@@ -94,21 +96,21 @@ const ListItem = ({
           </View>
           <View style={styles.right}>
             <View style={styles.empty}></View>
-            {restaurant.nos.size + restaurant.yeses.size <= 15 ? (
+            {restaurant.nos.length + restaurant.yeses.length <= 15 ? (
               <View style={styles.dotArea}>
-                {Array.from(restaurant.yeses).map((yes) => {
+                {restaurant.yeses.map((yes) => {
                   return <View style={[styles.dot, styles.yesDot]}></View>;
                 })}
-                {Array.from(restaurant.nos).map((no) => {
+                {restaurant.nos.map((no) => {
                   return <View style={[styles.dot, styles.noDot]}></View>;
                 })}
               </View>
             ) : (
               <View style={styles.dotArea}>
-                {Array.from(restaurant.yeses).map((yes) => {
+                {restaurant.yeses.map((yes) => {
                   return <View style={[styles.line, styles.yesDot]}></View>;
                 })}
-                {Array.from(restaurant.nos).map((no) => {
+                {restaurant.nos.map((no) => {
                   return <View style={[styles.line, styles.noDot]}></View>;
                 })}
               </View>

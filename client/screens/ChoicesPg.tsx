@@ -80,7 +80,7 @@ const ChoicesPg = ({ route, navigation }: choicesProps) => {
   // after we're done with the choices page, going back should only take us to the start screen.
   useEffect(() => {
     if (currentIndex < 0) {
-      socket.emit("get-restaurant-list", room);
+      socket.emit("get-results", room);
       navigation.dispatch(
         CommonActions.reset({
           index: 1,
@@ -105,11 +105,11 @@ const ChoicesPg = ({ route, navigation }: choicesProps) => {
       setCurrentIndex(index - 1);
       animateStuff(index);
       await childRefs[index].current.swipe(dir); // Swipe the card!
-      if (dir === "right") {
-        socket.emit("yes-vote", room, index, username);
-      } else {
-        socket.emit("no-vote", room, index, username);
-      }
+      // if (dir === "right") {
+      //   socket.emit("yes-vote", room, index, username);
+      // } else {
+      //   socket.emit("no-vote", room, index, username);
+      // }
     }
   };
 

@@ -50,8 +50,8 @@ export type rest = {
   phone: string;
   display_phone: string;
   distance: number;
-  yeses: Set<string>;
-  nos: Set<string>;
+  yeses: Array<string>;
+  nos: Array<string>;
 };
 
 const OpenURLButton = ({ url, children }: { url: string; children: any }) => {

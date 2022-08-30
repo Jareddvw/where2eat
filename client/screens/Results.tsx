@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   Pressable,
   Platform,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackParams } from "../App";
@@ -15,11 +16,23 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import sampleData from "../components/sampleData";
 import List from "../components/List";
 import { CommonActions } from "@react-navigation/native";
+import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
 
 type resultsProps = NativeStackScreenProps<RootStackParams, "Results", "Stack">;
 
+const wait = (timeout: number) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 const Results = ({ navigation, route }: resultsProps) => {
   let { socket, restaurants, setRestaurants } = useContext(SocketContext);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    socket.emit("get-results", route.params.roomName);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const leaveRoom = () => {
     const resetAction = CommonActions.reset({
@@ -31,33 +44,57 @@ const Results = ({ navigation, route }: resultsProps) => {
     navigation.dispatch(resetAction);
   };
 
+  useEffect(() => {
+    socket.on("results-list", (newRestaurants) => {
+      setRefreshing(false);
+      setRestaurants(newRestaurants);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("updating results...: ", restaurants.length);
+  }, [restaurants]);
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.headerView}>
-        <Text style={styles.blackText}>
-          Where
-          <Text style={styles.redText}>2</Text>
-          Eat
-        </Text>
-        <View style={styles.partyView}>
-          <Text style={styles.partyName}>{route.params.roomName}</Text>
-          <Pressable style={{ marginBottom: 0 }} onPress={leaveRoom}>
-            <MaterialCommunityIcons style={styles.partyName} name="exit-run" />
-          </Pressable>
+    <SafeAreaView style={styles.outermost}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={styles.headerView}>
+          <Text style={styles.blackText}>
+            Where
+            <Text style={styles.redText}>2</Text>
+            Eat
+          </Text>
+          <View style={styles.partyView}>
+            <Text style={styles.partyName}>{route.params.roomName}</Text>
+            <Pressable style={{ marginBottom: 0 }} onPress={leaveRoom}>
+              <MaterialCommunityIcons
+                style={styles.partyName}
+                name="exit-run"
+              />
+            </Pressable>
+          </View>
+          <Text style={styles.members}>
+            {restaurants[0].yeses && restaurants[0].nos
+              ? restaurants[0].yeses.length + restaurants[0].nos.length
+              : 0}{" "}
+            members
+          </Text>
         </View>
-        <Text style={styles.members}>
-          {restaurants[0].yeses && restaurants[0].nos
-            ? restaurants[0].yeses.size + restaurants[0].nos.size
-            : 0}{" "}
-          members
-        </Text>
-      </View>
-      <List restaurants={restaurants} />
-    </ScrollView>
+        <List restaurants={restaurants} />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  outermost: {
+    flex: 1,
+  },
   container: {
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -65,7 +102,7 @@ const styles = StyleSheet.create({
   headerView: {
     // flex:sizes.headerView,
     alignItems: "flex-start",
-    marginTop: Platform.OS === "ios" ? 48 : 30,
+    marginTop: Platform.OS === "ios" ? 10 : 10,
     justifyContent: "space-between",
     height: 110,
     marginLeft: 16,
