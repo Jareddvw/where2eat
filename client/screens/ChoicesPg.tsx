@@ -64,13 +64,9 @@ const ChoicesPg = ({ route, navigation }: choicesProps) => {
   const username = route.params.username;
 
   const leaveRoom = () => {
-    const resetAction = CommonActions.reset({
-      index: 0,
-      routes: [{ name: "Start" }],
-    });
     socket.emit("leave-room", route.params.roomName);
     setRestaurants([]);
-    navigation.dispatch(resetAction);
+    navigation.navigate("Start");
   };
 
   useEffect(() => {

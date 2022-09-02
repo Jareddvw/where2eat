@@ -35,19 +35,14 @@ const Results = ({ navigation, route }: resultsProps) => {
   }, []);
 
   const leaveRoom = () => {
-    const resetAction = CommonActions.reset({
-      index: 0,
-      routes: [{ name: "Start" }],
-    });
     socket.emit("leave-room", route.params.roomName);
     setRestaurants([]);
-    navigation.dispatch(resetAction);
+    navigation.navigate("Start");
   };
 
   useEffect(() => {
     socket.on("results-list", (newRestaurants) => {
       setRefreshing(false);
-      setRestaurants(newRestaurants);
     });
   }, []);
 

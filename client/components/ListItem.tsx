@@ -98,20 +98,37 @@ const ListItem = ({
             <View style={styles.empty}></View>
             {restaurant.nos.length + restaurant.yeses.length <= 15 ? (
               <View style={styles.dotArea}>
-                {restaurant.yeses.map((yes) => {
-                  return <View style={[styles.dot, styles.yesDot]}></View>;
+                {restaurant.yeses.map((yes, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={[styles.dot, styles.yesDot]}
+                    ></View>
+                  );
                 })}
-                {restaurant.nos.map((no) => {
-                  return <View style={[styles.dot, styles.noDot]}></View>;
+                {restaurant.nos.map((no, index) => {
+                  return (
+                    <View key={index} style={[styles.dot, styles.noDot]}></View>
+                  );
                 })}
               </View>
             ) : (
               <View style={styles.dotArea}>
-                {restaurant.yeses.map((yes) => {
-                  return <View style={[styles.line, styles.yesDot]}></View>;
+                {restaurant.yeses.map((yes, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={[styles.line, styles.yesDot]}
+                    ></View>
+                  );
                 })}
-                {restaurant.nos.map((no) => {
-                  return <View style={[styles.line, styles.noDot]}></View>;
+                {restaurant.nos.map((no, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={[styles.line, styles.noDot]}
+                    ></View>
+                  );
                 })}
               </View>
             )}

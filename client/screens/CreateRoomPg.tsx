@@ -45,7 +45,7 @@ const CreateRoomPg = ({ navigation }: create1Props) => {
         </View>
       </View>
       <View style={styles.inputArea}>
-        <Text style={styles.captionText}>Food type?</Text>
+        <Text style={styles.captionText}>Search terms</Text>
         <View style={styles.searchSection}>
           <MaterialCommunityIcons
             style={styles.searchIcon}
@@ -55,7 +55,7 @@ const CreateRoomPg = ({ navigation }: create1Props) => {
           />
           <TextInput
             style={styles.input}
-            placeholder="Mexican"
+            placeholder="Restaurants"
             onChangeText={(food) => {
               setFood(food);
             }}

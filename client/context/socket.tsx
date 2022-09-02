@@ -15,6 +15,8 @@ export const SocketContext = createContext({
 });
 
 export const SocketProvider = ({ children }: { children: any }) => {
+  const [restaurants, setRestaurants] = useState<Array<rest>>([]);
+
   useEffect(() => {
     socket.on("restaurant-list", (rests) => {
       console.log("getting restaurants:");
@@ -25,8 +27,6 @@ export const SocketProvider = ({ children }: { children: any }) => {
       setRestaurants(rests);
     });
   }, []);
-
-  const [restaurants, setRestaurants] = useState<Array<rest>>([]);
 
   let socketData = {
     socket: socket,
