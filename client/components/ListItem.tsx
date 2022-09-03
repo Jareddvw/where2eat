@@ -237,7 +237,10 @@ const ListItem = ({
 
 const styles = StyleSheet.create({
   row: {
-    height: 87,
+    height: 'auto',
+    paddingTop:10,
+    paddingBottom:10,
+    // height:87,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",

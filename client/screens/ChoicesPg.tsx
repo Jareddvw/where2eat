@@ -185,6 +185,9 @@ const ChoicesPg = ({ route, navigation }: choicesProps) => {
                           shadowRadius: 4,
                           elevation: 3,
                           shadowOffset: { width: 0, height: 0 },
+                          borderColor: "#A3A3A3",
+                          borderWidth: Platform.OS == "android" ? 0.25 : 0,
+                          borderRadius: Platform.OS == "android" ? 4 : 15,
                         },
                         {
                           transform: [

@@ -82,14 +82,12 @@ const Card = ({ restaurant }: { restaurant: rest }) => {
     });
   };
 
-  const supportedURL = "https://google.com";
-
   return (
     <View style={styles.main}>
+      <View style={styles.nameView}>
+        <Text style={styles.restaurantName}>{restaurant.name}</Text>
+      </View>
       <View style={styles.header}>
-        <View style={styles.nameView}>
-          <Text style={styles.restaurantName}>{restaurant.name}</Text>
-        </View>
         <View style={styles.stars}>
           {[...Array(5)].map((e, i) => {
             if (i > Math.round(restaurant.rating) - 1) {
@@ -115,6 +113,7 @@ const Card = ({ restaurant }: { restaurant: rest }) => {
             {"   (" + restaurant.review_count})
           </Text>
         </View>
+        <Text style={styles.price}>{restaurant.price}</Text>
       </View>
       <View style={styles.subHeader}>
         <View style={styles.categories}>
@@ -126,7 +125,6 @@ const Card = ({ restaurant }: { restaurant: rest }) => {
             );
           })}
         </View>
-        <Text style={styles.price}>{restaurant.price}</Text>
       </View>
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{ uri: restaurant.image_url }} />
@@ -163,8 +161,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
+    marginTop:3,
   },
   nameView: {
     flex: 1,
@@ -183,7 +182,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
   subHeader: {
     flex: 1,
@@ -204,6 +203,7 @@ const styles = StyleSheet.create({
   price: {
     fontFamily: "Inter",
     fontSize: 14,
+    color: "#C5C2C2"
   },
   imageContainer: {
     flex: 11,
