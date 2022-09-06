@@ -18,9 +18,19 @@ By the end of voting, room members can see how many votes each restaurant receiv
 <img src="https://user-images.githubusercontent.com/91432012/185588934-e5736b1e-09da-47e3-bcef-f46217ddd9d2.png" width="150">
 <!-- <img src="https://user-images.githubusercontent.com/91432012/185590486-55c912cf-666a-43c4-9f27-263db13ab9fc.png" width="150"> -->
 <img src="https://user-images.githubusercontent.com/91432012/185591064-301dc4ce-a9cc-4c6c-b2f5-cb5474221c73.png" width="150">
-<img src="https://user-images.githubusercontent.com/91432012/185591982-3d92b51c-53d4-4f3c-b508-e11792a2a4dc.png" width="150">
+  <img src="https://user-images.githubusercontent.com/91432012/185591982-3d92b51c-53d4-4f3c-b508-e11792a2a4dc.png" width="150">
   
 </p>
+
+
+<p>
+
+  <img src="https://user-images.githubusercontent.com/91432012/188617386-2645f64d-4f41-48a2-9e15-8f6d894f84ce.PNG" width="150">
+<img src="https://user-images.githubusercontent.com/91432012/188617378-dab898ab-01a0-4079-8e2f-c3cb0ed0ae10.PNG" width="150">
+
+ </p>
+
+
 
 
 
