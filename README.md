@@ -21,18 +21,12 @@ By the end of voting, room members can see how many votes each restaurant receiv
 <img src="https://user-images.githubusercontent.com/91432012/185591982-3d92b51c-53d4-4f3c-b508-e11792a2a4dc.png" width="150">
   
 </p>
-<p>
 
 
 
-
-https://user-images.githubusercontent.com/91432012/188288882-5a77284d-59f4-4cad-b6e6-7d07b6eabb50.MP4
-
+<!-- https://user-images.githubusercontent.com/91432012/188288882-5a77284d-59f4-4cad-b6e6-7d07b6eabb50.MP4 -->
 
 
-
-
-</p>
 
 
 ## Requirements
